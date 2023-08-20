@@ -99,19 +99,66 @@ class Reader{
         for (int i{0}; i < this->units.size(); i++)
             this->read(i);
     };
-    std::vector<Unit> get(int elem){
-        std::vector<Unit> temps;
-        temps.push_back(this->units[elem]);
-        return temps;
+    Unit get(int elem){
+        Unit temp;
+        if(
+            elem < 0 ||
+            elem >= this->units.size()
+        )
+            return temp;
+        temp = this->units[elem];
+        return temp;
     };
     std::vector<Unit> get(int start, int end){
         std::vector<Unit> temps;
+        if(
+            start < 0 ||
+            start > end ||
+            start >= this->units.size() ||
+            end >= this->units.size()
+        )
+            return temps;
         for (int i{start}; i < this->units.size(); i++)
             temps.push_back(this->units[i]);
         return temps;
     };
+    std::vector<Unit> get(std::vector<int> elements){
+        std::vector<Unit> temps;
+        for (int i{0}; i < elements.size(); i++)
+            temps.push_back(this->get(i));
+        return temps;
+    };
     std::vector<Unit> getAll(){
         return this->units;
+    };
+    double temp(int elem){
+        double temp;
+        if(
+            elem < 0 ||
+            elem >= this->units.size()
+        )
+            return temp;
+        temp = this->units[elem].temp;
+        return temp;
+    };
+    std::vector<double> temp(int start, int end){
+        std::vector<double> temps;
+        if(
+            start < 0 ||
+            start > end ||
+            start >= this->units.size() ||
+            end >= this->units.size()
+        )
+            return temps;
+        for (int i{start}; i < end; i++)
+            temps.push_back(this->units[i].temp);
+        return temps;
+    };
+    std::vector<double> temp(std::vector<int> elements){
+        std::vector<double> temps;
+        for (int i{0}; i < elements.size(); i++)
+            temps.push_back(this->temp(i));
+        return temps;
     };
     std::vector<double> tempAll(){
         std::vector<double> temps;

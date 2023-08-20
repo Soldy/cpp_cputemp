@@ -15,8 +15,6 @@ struct Unit {
     std::string readed;
 };
 
-
-
 class Reader{
   private:
     std::set<std::string> correct_names = {
@@ -74,7 +72,7 @@ class Reader{
         next.path = this->hwmTempFile(dir, serial);
         next.name = next.path;
         this->units.push_back(next);
-    }
+    };
     void read(int &serial){
         std::string readed;
         std::ifstream temp_file;
@@ -83,18 +81,34 @@ class Reader{
         this->units[serial].temp = (std::stod(readed) / 1000.00);
         this->units[serial].readed = readed;
         temp_file.close();
-    }
-
+    };
   public:
     void discovery(){
-        for (int i{0}; i < 10; i++)
-            if(fs::exists(this->hwmDir(i)))
+        this->discovery(256);
+    };
+    void discovery(int end){
+        for (int i{0}; i < end; i++)
+            if(fs::exists(this->hwmDir(i))){
                 if(this->hwmDirCheck(i))
                     this->hwmTempDiscovery(i);
+            } else {
+                break;
+            }
     };
     void refresh(){
         for (int i{0}; i < this->units.size(); i++)
             this->read(i);
+    };
+    std::vector<Unit> get(int elem){
+        std::vector<Unit> temps;
+        temps.push_back(this->units[elem]);
+        return temps;
+    };
+    std::vector<Unit> get(int start, int end){
+        std::vector<Unit> temps;
+        for (int i{start}; i < this->units.size(); i++)
+            temps.push_back(this->units[i]);
+        return temps;
     };
     std::vector<Unit> getAll(){
         return this->units;
